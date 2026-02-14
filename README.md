@@ -128,4 +128,6 @@ This project is open source and available under the MIT License.
 
 ## Acknowledgments
 
+This project was developed with the assistance of AI technology.
+
 Built with [Tauri](https://tauri.app/) - Build smaller, faster, and more secure desktop applications with a web frontend.
