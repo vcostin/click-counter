@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click Counter</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Click Counter</h1>
+
+        <div id="clickArea" class="click-area">
+            <div class="click-count" id="clickCount">0</div>
+            <div class="click-label">CPS</div>
+        </div>
+
+        <button id="resetBtn" class="btn">Reset Counter</button>
+
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-label">Max CPS:</span>
+                <span class="stat-value" id="totalClicks">0</span>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        let clickTimestamps = [];
+        let currentCPS = 0;
+        let maxCPS = 0;
+
+        const clickArea = document.getElementById('clickArea');
+        const clickCountDisplay = document.getElementById('clickCount');
+        const totalClicksDisplay = document.getElementById('totalClicks');
+        const resetBtn = document.getElementById('resetBtn');
+
+        clickArea.addEventListener('click', (e) => {
+            const now = Date.now();
+            clickTimestamps.push(now);
+
+            // Add click animation
+            clickArea.classList.add('clicked');
+            setTimeout(() => {
+                clickArea.classList.remove('clicked');
+            }, 200);
+
+            // Create ripple effect at click position
+            createRipple(e);
+        });
+
+        resetBtn.addEventListener('click', () => {
+            clickTimestamps = [];
+            currentCPS = 0;
+            maxCPS = 0;
+            updateDisplay();
+        });
+
+        // Calculate CPS every 100ms
+        setInterval(() => {
+            calculateCPS();
+            updateDisplay();
+        }, 100);
+
+        function calculateCPS() {
+            const now = Date.now();
+            const oneSecondAgo = now - 1000;
+
+            // Remove clicks older than 1 second
+            clickTimestamps = clickTimestamps.filter(timestamp => timestamp > oneSecondAgo);
+
+            // Current CPS is the number of clicks in the last second
+            currentCPS = clickTimestamps.length;
+
+            // Track max CPS
+            if (currentCPS > maxCPS) {
+                maxCPS = currentCPS;
+            }
+        }
+
+        function updateDisplay() {
+            clickCountDisplay.textContent = currentCPS;
+            totalClicksDisplay.textContent = maxCPS;
+        }
+
+        function createRipple(event) {
+            const ripple = document.createElement('div');
+            ripple.className = 'ripple';
+
+            const rect = clickArea.getBoundingClientRect();
+            const x = event.clientX - rect.left;
+            const y = event.clientY - rect.top;
+
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+
+            clickArea.appendChild(ripple);
+
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        }
+    </script>
+</body>
+</html>

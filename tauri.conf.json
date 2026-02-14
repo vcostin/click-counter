@@ -1,0 +1,22 @@
+{
+  "productName": "Click Counter",
+  "version": "0.1.0",
+  "identifier": "com.clickcounter.app",
+  "build": {
+    "frontendDist": "ui"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "Click Counter",
+        "width": 450,
+        "height": 550,
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  }
+}
